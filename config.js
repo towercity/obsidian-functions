@@ -2,7 +2,7 @@ export default {
   vaultNotesPath:
     '/Users/j/Documents/Writing',
   dailiesDir: 'dailies/',
-  weekliesDir: 'weeklies/',
+  weekliesDir: 'generated/',
   sectionsToPull: ['Writing', 'Books'],
 };
 

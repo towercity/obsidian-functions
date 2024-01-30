@@ -27,7 +27,7 @@ const filesToGather = datesToPull.map(date => {
 // @var allNotes    All the notes we're pulling from, called from external func
 const allNotes = await getNotes(filesToGather);
 
-const weekNoteTitle = config.weekliesDir + firstDay.getYYYYwWW() + '-generated.md';
+const weekNoteTitle = config.weekliesDir + firstDay.getYYYYwWW() + '.md';
 const weekNote = {
   fileName: weekNoteTitle,
   vaultTitle: weekNoteTitle.split('.md')[0],
