@@ -1,5 +1,5 @@
 import '../lib/dateExt.js';
-import { getNotes, mergeWeekContent, writeNote } from
+import { getNotes, mergeReflexNoteContent, writeNote } from
     '../lib/obsidian-to-astro.js';
 
 import config from '../config.js';
@@ -31,7 +31,7 @@ const weekNoteTitle = config.weekliesDir + firstDay.getYYYYwWW() + '.md';
 const weekNote = {
     fileName: weekNoteTitle,
     vaultTitle: weekNoteTitle.split('.md')[0],
-    content: mergeWeekContent(allNotes)
+    content: mergeReflexNoteContent(allNotes)
 }
 
 console.log(weekNote)

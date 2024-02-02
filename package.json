@@ -5,7 +5,8 @@
   "description": "Stuff for me to use with obsidian",
   "main": "index.js",
   "scripts": {
-    "weeks": "node scripts/reflex-weekly.js"
+    "weeks": "node scripts/reflex-weekly.js",
+    "months": "node scripts/reflex-monthly.js"
   },
   "author": "",
   "license": "ISC"
