@@ -16,12 +16,10 @@ export default async function makeReflexNote(firstDay, reflexLength, noteTitle) 
 
     // Create a list of obsidian file names from the above `datesToPull` array
     const filesToGather = datesToPull.map(date => {
-        console.log(date)
         return config.dailiesDir + date.getYYYYMMDD() + '.md';
     });
 
     // @var allNotes    All the notes we're pulling from, called from external func
-    console.log(filesToGather);
     const allNotes = await getNotes(filesToGather);
 
     const generatedNote = {
