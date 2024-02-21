@@ -22,9 +22,12 @@ const testContent = `
 - [[ØXN - CYRM]]
 # Work
 - [[MarComs]] meet
+	- [ ] second list
 - [[Annual Report]] styles:
 	- [x] look at the imports from the old one, see what else we can 'polyfill'
+	- [ ] second list
 - [[RA Cards]] fixes
+	- second list
 - [[SearchWP]] fixes
 # Cook
 # Tasks`;
