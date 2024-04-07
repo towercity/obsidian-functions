@@ -1,6 +1,8 @@
 export default {
   vaultNotesPath:
     '/Users/j/Documents/Writing',
+  astroPath: 
+    '/Users/j/code/konger-astro',
   dailiesDir: 'periodic/dailies/',
   weekliesDir: 'generated/',
   monthliesDir: 'generated/',
