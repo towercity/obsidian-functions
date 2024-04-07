@@ -37,4 +37,4 @@ This homemade energy bar recipe is the perfect wholesome snack! It's naturally s
 - Use the bench scraper to cut them
 `
 
-makeRecipeIntBlogPost( testContent );
+console.log( makeRecipeIntBlogPost( testContent, 'Date Bars' ) )
