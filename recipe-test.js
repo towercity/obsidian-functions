@@ -1,4 +1,4 @@
-import { makeRecipeIntBlogPost } from './lib/recipe-handler.js'
+import { makeRecipeIntoBlogPost } from './lib/recipe-handler.js'
 
 const testContent = `---
 tags: recipe 
@@ -37,4 +37,4 @@ This homemade energy bar recipe is the perfect wholesome snack! It's naturally s
 - Use the bench scraper to cut them
 `
 
-console.log( makeRecipeIntBlogPost( testContent, 'Date Bars' ) )
+console.log( makeRecipeIntoBlogPost( testContent, 'Date Bars' ) )
