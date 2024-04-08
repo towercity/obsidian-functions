@@ -6,7 +6,7 @@ export default {
   dailiesDir: 'periodic/dailies/',
   weekliesDir: 'generated/',
   monthliesDir: 'generated/',
-  recipesDie: 'recipe/',
+  recipesDir: 'recipe/',
   sectionsToPull: ['Writing', 'Books'],
   firstDayString: "Feb 5 2024"
 };
