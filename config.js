@@ -2,7 +2,7 @@ export default {
   vaultNotesPath:
     '/Users/j/Documents/Writing',
   astroPath: 
-    '/Users/j/code/konger-astro/pages/posts',
+    '/Users/j/code/konger-astro/src/pages/posts',
   dailiesDir: 'periodic/dailies/',
   weekliesDir: 'generated/',
   monthliesDir: 'generated/',

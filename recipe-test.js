@@ -1,5 +1,6 @@
 // import { makeRecipeIntoBlogPost } from './lib/recipe-handler.js'
 import { readNotes } from './lib/obsidian-handlers.js'
+import { doRecipes } from './lib/recipe-handler.js'
 
 const testContent = `---
 tags: recipe 
@@ -40,6 +41,4 @@ This homemade energy bar recipe is the perfect wholesome snack! It's naturally s
 
 // console.log( makeRecipeIntoBlogPost( testContent, 'Date Bars' ) )
 
-readNotes( 'recipe/' ).then( notes => {
-    
-})
+doRecipes();
