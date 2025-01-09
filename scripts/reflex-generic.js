@@ -10,8 +10,8 @@ export default async function makeReflexNote(firstDay, reflexLength, noteTitle) 
     // `firstDay`
     const datesToPull = [...Array(reflexLength)].map((empty, offset) => {
         const tempDay = new Date(firstDay.toString());
-        tempDay.setDate(tempDay.getDate() + offset)
-        return tempDay
+        tempDay.setDate(tempDay.getDate() + offset);
+        return tempDay;
     });
 
     // Create a list of obsidian file names from the above `datesToPull` array
@@ -28,6 +28,6 @@ export default async function makeReflexNote(firstDay, reflexLength, noteTitle) 
         content: mergeReflexNoteContent(allNotes)
     }
 
-    console.log(generatedNote);
+    // console.log(generatedNote);
     writeNote(generatedNote);
 }
