@@ -1,13 +1,25 @@
 export default {
   vaultNotesPath:
-    '/Users/j/obsidian/Writing',
+    '/Users/mnerger/obsidian/Writing',
   astroPath:
-    '/Users/j/code/konger-astro/src/pages/posts',
+    '/Users/mnerger/code/konger-astro/src/pages/posts',
   dailiesDir: 'periodic/dailies/',
   weekliesDir: 'periodic/weeklies/',
   monthliesDir: 'generated/',
   recipesDir: 'recipe/',
-  sectionsToPull: ['Writing', "Projects", 'Books', "Music", "Movie", "TV", "Work"],
-  firstDayString: "Dec 30 2024"
+  sectionsToPull: [
+    'Writing',
+    "Projects",
+    "Work",
+    'Books',
+    "Music",
+    "Movie",
+    "TV",
+    "Podcast",
+    "Game",
+    "Video",
+    "Other"
+  ],
+  firstDayString: "Feb 17 2025"
 };
 

@@ -1,5 +1,5 @@
 import '../lib/dateExt.js';
-import { getNotes, mergeReflexNoteContent, writeNote } from
+import { getNotes, mergeReflexNoteContent, appendNote } from
     '../lib/obsidian-to-astro.js';
 
 import config from '../config.js';
@@ -29,5 +29,5 @@ export default async function makeReflexNote(firstDay, reflexLength, noteTitle) 
     }
 
     // console.log(generatedNote);
-    writeNote(generatedNote);
+    appendNote(generatedNote);
 }
