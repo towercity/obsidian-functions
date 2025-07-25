@@ -1,25 +1,22 @@
 export default {
-  vaultNotesPath:
-    '/Users/mnerger/obsidian/Writing',
-  astroPath:
-    '/Users/mnerger/code/konger-astro/src/pages/posts',
-  dailiesDir: 'periodic/dailies/',
-  weekliesDir: 'periodic/weeklies/',
-  monthliesDir: 'generated/',
-  recipesDir: 'recipe/',
+  vaultNotesPath: "/Users/mnerger/obsidian/Writing",
+  astroPath: "/Users/mnerger/code/konger-astro/src/pages/posts",
+  dailiesDir: "periodic/dailies/",
+  weekliesDir: "periodic/weeklies/",
+  monthliesDir: "generated/",
+  recipesDir: "recipe/",
   sectionsToPull: [
-    'Writing',
-    "Projects",
     "Work",
-    'Books',
+    "Writing",
+    "Projects",
+    "Books",
     "Music",
     "Movie",
     "TV",
     "Podcast",
     "Game",
     "Video",
-    "Other"
+    "Other",
   ],
-  firstDayString: "Feb 17 2025"
+  firstDayString: "July 14 25",
 };
-
