@@ -12,4 +12,13 @@ import { readNotes } from "../lib/obsidian-handlers.js";
 
 let books = await readNotes(config.booksDir);
 
-console.log(books[0]);
+const convertBookNoteToObject = (bookNote) => {
+  const { frontMatter } = bookNote;
+  const book = {
+    title: frontMatter.title,
+  };
+
+  return bookNote;
+};
+
+console.log(convertBookNoteToObject(books[0]));

@@ -10,5 +10,8 @@
     "months": "node scripts/reflex-monthly.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "gray-matter": "^4.0.3"
+  }
 }
