@@ -1,6 +1,6 @@
 export default {
   vaultNotesPath: "/Users/mnerger/obsidian/Writing",
-  astroPath: "/Users/mnerger/code/konger-astro/src/pages/posts",
+  astroPath: "/Users/mnerger/notes.d/projects/astro-blog/src/",
   dailiesDir: "periodic/dailies/",
   weekliesDir: "periodic/weeklies/",
   monthliesDir: "generated/",
