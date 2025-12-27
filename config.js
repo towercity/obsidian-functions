@@ -4,6 +4,7 @@ export default {
   dailiesDir: "periodic/dailies/",
   weekliesDir: "periodic/weeklies/",
   monthliesDir: "generated/",
+  yearliesDir: "generated/",
   recipesDir: "recipe/",
   booksDir: "media/book/",
   sectionsToPull: [
