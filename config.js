@@ -1,6 +1,6 @@
 export default {
-  vaultNotesPath: "/Users/mnerger/obsidian/Writing",
-  astroPath: "/Users/mnerger/notes.d/projects/astro-blog/src/",
+  vaultNotesPath: "/Users/j/obsidian/Writing",
+  astroPath: "/Users/j/notes.d/projects/astro-blog/src/",
   dailiesDir: "periodic/dailies/",
   weekliesDir: "periodic/weeklies/",
   monthliesDir: "generated/",
@@ -19,5 +19,5 @@ export default {
     "Video",
     "Other",
   ],
-  firstDayString: "July 28 25",
+  firstDayString: "Dec 8 2025",
 };

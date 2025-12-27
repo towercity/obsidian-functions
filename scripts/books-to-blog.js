@@ -7,16 +7,21 @@
  * 5. save the json to the astro directory
  */
 import { promises as fsp } from "fs";
+import slugify from "slugify";
 
 import config from "../config.js";
 import { readNotes } from "../lib/obsidian-handlers.js";
 
 const convertBookNoteToObject = (bookNote) => {
   const { frontMatter } = bookNote;
-  const { title, started, finished, publish, status, cover } = frontMatter;
+  const { title, started, finished, status, cover, tags } = frontMatter;
+  const author = getAuthor(frontMatter);
   // TODO: add function to get years touched
   // TODO handle multiple start/ends
   // TODO: get dates from why i read etcs
+
+  // only add if we're tagged a book
+  if (!(tags && tags.includes("book"))) return null;
 
   const {
     content,
@@ -25,18 +30,25 @@ const convertBookNoteToObject = (bookNote) => {
     ["why i gave up"]: gaveUp,
   } = splitByHeadings(bookNote.content);
 
+  const slug = bookNote.fileName
+    .replace(/ - /g, "-")
+    .replace(/[ ]/g, "-")
+    .replace(/[\(\)]/g, "")
+    .toLowerCase()
+    .slice(0, -3);
+
   const book = {
     title,
-    author: getAuthor(frontMatter),
-    started,
-    finished,
-    publish,
+    author,
+    started: convertObsidianLink(String(started)),
+    finished: convertObsidianLink(String(finished)),
     status,
     cover,
     content,
     review,
     whyRead,
     gaveUp,
+    slug,
   };
 
   // return bookNote;
@@ -74,9 +86,9 @@ const splitByHeadings = (content) => {
 };
 
 const booksNotes = await readNotes(config.booksDir);
-const books = booksNotes.map(convertBookNoteToObject);
+const books = booksNotes.map(convertBookNoteToObject).filter((book) => book);
 
 // console.log(books[0]);
 // TODO: save a json to the astro :)
 console.log(config.astroPath + "data/books.json");
-fsp.appendFile(config.astroPath + "data/books.json", JSON.stringify(books));
+fsp.writeFile(config.astroPath + "data/books.json", JSON.stringify(books));
