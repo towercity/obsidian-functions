@@ -6,6 +6,8 @@ TODO:
 - use types when possible rather than strings
 --}
 
+import notes
+
 testNote = """
 ---
 tags:
