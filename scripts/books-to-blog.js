@@ -89,6 +89,5 @@ const booksNotes = await readNotes(config.booksDir);
 const books = booksNotes.map(convertBookNoteToObject).filter((book) => book);
 
 // console.log(books[0]);
-// TODO: save a json to the astro :)
 console.log(config.astroPath + "data/books.json");
 fsp.writeFile(config.astroPath + "data/books.json", JSON.stringify(books));
