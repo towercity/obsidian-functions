@@ -36,7 +36,12 @@ data Note = Note {
 } deriving (Show)
 
 type FrontMatter = [FrontMatterEntry]
-type FrontMatterEntry = (String, String)
+type FrontMatterEntry = (String, FrontMatterValue)
+data FrontMatterValue =
+  Single String |
+  Multiple [String] |
+  Empty
+  deriving (Show)
 
 parseNoteContent :: String -> (Maybe FrontMatter, Maybe String)
 parseNoteContent x
@@ -49,17 +54,17 @@ parseNoteContentWithFrontMatter x =
 
 parseFrontMatter :: [String] -> Maybe FrontMatter
 parseFrontMatter xs =
-  Just [("yes", "yes")]
+  Just [("yes", Single "yes")]
 
 foldFrontMatter :: String -> FrontMatter -> FrontMatter
 foldFrontMatter line [] = [readFrontMatterLine line]
-foldFrontMatter line ((a,""):xs) = [(a,"empty")]
+foldFrontMatter line ((a,Empty):xs) = [(a,Single"empty")]
 foldFrontMatter line ((a,b):xs) = [(a,b)]
 
 readFrontMatterLine :: String -> FrontMatterEntry
 readFrontMatterLine line
-  | null values = (line,"")
-  | otherwise = (key, unwords values)
+  | null values = (line, Empty)
+  | otherwise = (key, Single (unwords values))
   where key:values = words line
 
 -- buildFrontMatter :: String -> FrontMatterEntry -> FrontMatter
