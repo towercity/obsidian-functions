@@ -35,20 +35,32 @@ data Note = Note {
   , content :: Maybe String
 } deriving (Show)
 
-type FrontMatter = [(String, String)]
+type FrontMatter = [FrontMatterEntry]
+type FrontMatterEntry = (String, String)
 
-parseNote :: String -> Note
-parseNote x
-  | isPrefixOf "---" x = Note {
-        filename="testPref.md"
-      , title="test"
-      , frontMatter=Nothing
-      , content=Just "test" }
-  | otherwise = Note {
-        filename="testNoPref.md"
-      , title="test"
-      , frontMatter=Nothing
-      , content=Just x }
+parseNoteContent :: String -> (Maybe FrontMatter, Maybe String)
+parseNoteContent x
+  | "---" `isPrefixOf` x = parseNoteContentWithFrontMatter x
+  | otherwise = (Nothing, Just x)
 
-front = parseNote testNote
-noFront = parseNote testNote2
+parseNoteContentWithFrontMatter :: String -> (Maybe FrontMatter, Maybe String)
+parseNoteContentWithFrontMatter x =
+  (parseFrontMatter (takeWhile (/= "---") (drop 1 (lines x))), Just "yes")
+
+parseFrontMatter :: [String] -> Maybe FrontMatter
+parseFrontMatter xs =
+  Just [("yes", "yes")]
+
+foldFrontMatter :: String -> FrontMatter -> FrontMatter
+foldFrontMatter line [] = [(line,"")]
+foldFrontMatter line (x:xs)
+  | snd x == "" = (fst x, line):xs -- the blank second string == add string
+  | otherwise = xs     -- otherwise, how do we account for multilines?
+
+ -- x = current, xs = folded (i think)
+-- TODO: separate function for handling all the options, to make it more readable
+
+-- buildFrontMatter :: String -> FrontMatterEntry -> FrontMatter
+
+front = parseNoteContent testNote
+noFront = parseNoteContent testNote2

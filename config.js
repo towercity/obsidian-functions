@@ -12,6 +12,7 @@ export default {
     "Writing",
     "Projects",
     "Books",
+	"Short Stories",
     "Music",
     "Movie",
     "TV",
@@ -20,5 +21,5 @@ export default {
     "Video",
     "Other",
   ],
-  firstDayString: "Dec 22 2025",
+  firstDayString: "Dec 29 2025",
 };
