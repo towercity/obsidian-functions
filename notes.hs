@@ -53,9 +53,10 @@ parseFrontMatter xs =
 
 foldFrontMatter :: String -> FrontMatter -> FrontMatter
 foldFrontMatter line [] = [(line,"")]
-foldFrontMatter line (x:xs)
-  | snd x == "" = (fst x, line):xs -- the blank second string == add string
-  | otherwise = xs     -- otherwise, how do we account for multilines?
+foldFrontMatter line ((a,""):xs) = [(a,"empty")]
+foldFrontMatter line ((a,b):xs) = [(a,b)]
+  -- | snd x == "" = (fst x, line):xs -- the blank second string == add string
+  -- | otherwise = xs     -- otherwise, how do we account for multilines?
 
  -- x = current, xs = folded (i think)
 -- TODO: separate function for handling all the options, to make it more readable
