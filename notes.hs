@@ -58,8 +58,10 @@ parseFrontMatter xs =
 
 foldFrontMatter :: String -> FrontMatter -> FrontMatter
 foldFrontMatter line [] = [readFrontMatterLine line]
-foldFrontMatter line ((a,Empty):xs) = [(a,Single"empty")]
-foldFrontMatter line ((a,b):xs) = [(a,b)]
+foldFrontMatter line ((key,Empty):xs) = [(key,Single"empty")]
+  -- ABOVE: if line starts with bulletpoint (Data.Char isEmpty + dropWhile + isPrefix of to
+  -- find), add to list, otherwise empty and move on (how diff empty untsted vs just not done?)
+foldFrontMatter line ((key,value):xs) = [(key,value)]
 
 readFrontMatterLine :: String -> FrontMatterEntry
 readFrontMatterLine line
