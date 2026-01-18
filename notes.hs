@@ -56,20 +56,42 @@ parseFrontMatter :: [String] -> Maybe FrontMatter
 parseFrontMatter xs =
   Just [("yes", Single "yes")]
 
-foldFrontMatter :: String -> FrontMatter -> FrontMatter
-foldFrontMatter line [] = [readFrontMatterLine line]
-foldFrontMatter line ((key,Empty):xs) = [(key,Single"empty")]
-  -- ABOVE: if line starts with bulletpoint (Data.Char isEmpty + dropWhile + isPrefix of to
-  -- find), add to list, otherwise empty and move on (how diff empty untsted vs just not done?)
-foldFrontMatter line ((key,value):xs) = [(key,value)]
+-- foldFrontMatter :: String -> FrontMatter -> FrontMatter
+-- --foldFrontMatter line [] = [readFrontMatterLine line]
+-- foldFrontMatter line ((key,value):xs) = [(key,value)]
 
-readFrontMatterLine :: String -> FrontMatterEntry
+readFrontMatterLine :: String -> (String, String)
 readFrontMatterLine line
-  | null values = (line, Empty)
-  | otherwise = (key, Single (unwords values))
-  where key:values = words line
+  -- key only line
+  | ":" == value = (line, "")
+  -- value only line
+  | take 3 key == "  -" = ("", drop 4 key)
+  -- key and value
+  | not (null key) && not (null value) = (key, drop 2 value)
+  -- just in case: let it be folded away
+  | otherwise = ("", "")
+  where (key,value) = break (== ':') line
 
 -- buildFrontMatter :: String -> FrontMatterEntry -> FrontMatter
 
 front = parseNoteContent testNote
 noFront = parseNoteContent testNote2
+
+deconstructFrontMatter :: String -> [String]
+deconstructFrontMatter x = takeWhile (/= "---") (drop 1 (lines x))
+
+frontMatterRead = deconstructFrontMatter testNote
+-- step 1: map out the lines into key/vals
+step1 = map readFrontMatterLine frontMatterRead
+-- step 2: consolidate
+--step2 = consolidateFrontMatter step1
+
+consolidateFrontMatter :: FrontMatter -> [(String,String)] -> FrontMatter
+consolidateFrontMatter _ [] = []
+consolidateFrontMatter [] ((key,val):rest) = consolidateFrontMatter [(key,fmval)] rest
+  where fmval = translateFrontMatterValue val
+
+translateFrontMatterValue :: String -> FrontMatterValue
+translateFrontMatterValue [] = Empty
+translateFrontMatterValue string = Single string
+-- how handle muluple?
