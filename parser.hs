@@ -1,9 +1,10 @@
 {-# LANGUAGE MultilineStrings #-}
+{-# LANGUAGE DuplicateRecordFields #-}
 
 import Text.ParserCombinators.Parsec
 import Control.Monad (void)
 
-testYaml = """
+testNote = """
 ---
 tags:
   - book
@@ -17,9 +18,7 @@ title: Structure and Interpretation of Computer Programs
 started: "[[2025-12-27]]"
 cover: https://drive.konger.online/book-cover/sicp.png
 ---
-"""
 
-testContent = """
 hello there
 # why i read
 - gotta learn the programs!
@@ -29,6 +28,10 @@ hello there
 this is that ne
 eof
 """
+data Note = Note {
+    fm      :: Maybe FrontMatter
+  , content :: NoteContent
+} deriving (Show)
 
 type FrontMatter = [FrontMatterEntry]
 type FrontMatterEntry = (String, FrontMatterValue)
@@ -39,6 +42,12 @@ data Section = Section {
     title   :: Maybe String -- maybe bc of pre-heading text
   , content :: String
 } deriving (Show)
+
+note :: Parser Note
+note = do
+  fm      <- optionMaybe (try frontMatter)
+  content <- noteContent
+  return $ Note fm content
 
 -- Font Matter
 ----
@@ -109,8 +118,8 @@ h1 = do
   char '#'
   notFollowedBy (char '#')
   skipMany (char ' ')
-  content <- mdLine
-  return content
+  heading <- mdLine
+  return heading
 
 mdLine :: Parser String
 mdLine = manyTill anyChar (void eol <|> eof)
@@ -123,5 +132,5 @@ eol = char '\n'
 
 main :: IO ()
 main = do
-  print (parse noteContent "(unknown)" testContent)
+  print (parse note "(unknown)" testNote)
   return ()
