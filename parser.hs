@@ -19,12 +19,10 @@ cover: https://drive.konger.online/book-cover/sicp.png
 """
 
 frontMatter = do
-  string "---"
-  char '\n'
+  string "---\n"
   entries <- manyTill yamlEntry (try yamlEnd)
   return entries
 
--- TODO: handle multiline lists
 yamlEntry = do
   key <- many1 (noneOf ":\n")
   char ':'
@@ -37,21 +35,22 @@ yamlValue =
   <|> try yamlValueWrappedSingle
 
 yamlValueMulti = do
-  char '\n'
+  char '\n' -- multi-entry values always start with AND are separated by \ns!
   value <- many1 (string "  - " >> yamlValueSingle)
-  --value <- yamlValueSingle
   return value
 
+-- we use this to properly wrap our single values to keep the same type as multi
+-- entry values
 yamlValueWrappedSingle = do
-	value <- yamlValueSingle
-	return [value]
+  value <- yamlValueSingle
+  return [value]
 
-yamlValueSingle = do
-	value <- manyTill anyChar eol
-	return value
+-- we ALWAYS pass in pre-filtered text here, so we can just go to end of line
+yamlValueSingle = manyTill anyChar eol
 
 yamlEnd = do
   string "---"
   optional (char '\n')
 
+-- yeah, we SHOULD do this cross platform. thus: at least a variable
 eol = char '\n'
