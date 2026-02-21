@@ -1,6 +1,7 @@
 {-# LANGUAGE MultilineStrings #-}
 
 import Text.ParserCombinators.Parsec
+import Control.Monad (void)
 
 testYaml = """
 ---
@@ -26,6 +27,7 @@ hello there
 [[2022-01-02]]
 
 this is that ne
+eof
 """
 
 type FrontMatter = [FrontMatterEntry]
@@ -91,16 +93,35 @@ noteContent = do
 openingText :: Parser Section
 openingText = do
   lines' <- mdLines
-  return (Section Nothing (unlines lines'))
+  return $ Section Nothing (unlines lines')
 
 section :: Parser Section
-section = undefined
+section = do
+  title  <- h1
+  lines' <- mdLines
+  return $ Section (Just title) (unlines lines')
 
 mdLines :: Parser [String]
-mdLines = undefined
+mdLines = manyTill mdLine (void (lookAhead h1) <|> eof)
+
+h1 :: Parser String
+h1 = do
+  char '#'
+  notFollowedBy (char '#')
+  skipMany (char ' ')
+  content <- mdLine
+  return content
+
+mdLine :: Parser String
+mdLine = manyTill anyChar (void eol <|> eof)
 
 -- Other
 ----
 
 -- yeah, we SHOULD do this cross platform. thus: at least a variable
 eol = char '\n'
+
+main :: IO ()
+main = do
+  print (parse noteContent "(unknown)" testContent)
+  return ()
