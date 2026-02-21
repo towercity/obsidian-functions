@@ -18,9 +18,28 @@ cover: https://drive.konger.online/book-cover/sicp.png
 ---
 """
 
+testContent = """
+hello there
+# why i read
+- gotta learn the programs!
+# rev
+[[2022-01-02]]
+
+this is that ne
+"""
+
 type FrontMatter = [FrontMatterEntry]
 type FrontMatterEntry = (String, FrontMatterValue)
 type FrontMatterValue = [String]
+
+type NoteContent = [Section]
+data Section = Section {
+    title   :: Maybe String -- maybe bc of pre-heading text
+  , content :: String
+} deriving (Show)
+
+-- Font Matter
+----
 
 frontMatter :: Parser FrontMatter
 frontMatter = do
@@ -59,6 +78,29 @@ yamlValueSingle = manyTill anyChar eol
 yamlEnd = do
   string "---"
   optional (char '\n')
+
+-- Note Content
+----
+
+noteContent :: Parser NoteContent
+noteContent = do
+  pre  <- openingText
+  rest <- many section
+  return (pre : rest)
+
+openingText :: Parser Section
+openingText = do
+  lines' <- mdLines
+  return (Section Nothing (unlines lines'))
+
+section :: Parser Section
+section = undefined
+
+mdLines :: Parser [String]
+mdLines = undefined
+
+-- Other
+----
 
 -- yeah, we SHOULD do this cross platform. thus: at least a variable
 eol = char '\n'
