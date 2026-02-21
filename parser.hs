@@ -18,11 +18,18 @@ cover: https://drive.konger.online/book-cover/sicp.png
 ---
 """
 
+type FrontMatter = [FrontMatterEntry]
+type FrontMatterEntry = (String, FrontMatterValue)
+type FrontMatterValue = [String]
+
+frontMatter :: Parser FrontMatter
 frontMatter = do
-  string "---\n"
+  string "---"
+  eol
   entries <- manyTill yamlEntry (try yamlEnd)
   return entries
 
+yamlEntry :: Parser FrontMatterEntry
 yamlEntry = do
   key <- many1 (noneOf ":\n")
   char ':'
@@ -30,12 +37,13 @@ yamlEntry = do
   values <- yamlValue
   return (key, values)
 
+yamlValue :: Parser FrontMatterValue
 yamlValue =
   try yamlValueMulti
   <|> try yamlValueWrappedSingle
 
 yamlValueMulti = do
-  char '\n' -- multi-entry values always start with AND are separated by \ns!
+  eol   -- multi-entry values always start with AND are separated by eols!
   value <- many1 (string "  - " >> yamlValueSingle)
   return value
 
