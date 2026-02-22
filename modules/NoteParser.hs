@@ -1,7 +1,7 @@
 {-# LANGUAGE MultilineStrings #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 
-module ObsidianNoteParser (
+module NoteParser (
     parseNote
   , NoteContent
 ) where
@@ -9,30 +9,6 @@ module ObsidianNoteParser (
 import Text.ParserCombinators.Parsec
 import Control.Monad (void)
 
-testNote = """
----
-tags:
-  - book
-status: reading
-rating:
-aliases:
-  - Structure and Interpretation of Computer Programs
-  - SICP
-author: "[[Harold Abelson and Gerald Jay Sussman]]"
-title: Structure and Interpretation of Computer Programs
-started: "[[2025-12-27]]"
-cover: https://drive.konger.online/book-cover/sicp.png
----
-
-hello there
-# why i read
-- gotta learn the programs!
-# rev
-[[2022-01-02]]
-
-this is that ne
-eof
-"""
 
 data NoteContent = NoteContent {
     fm      :: Maybe FrontMatter
@@ -136,7 +112,8 @@ mdLine = manyTill anyChar (void eol <|> eof)
 -- yeah, we SHOULD do this cross platform. thus: at least a variable
 eol = char '\n'
 
+-- do all our parsing in this function for easy export!
 parseNote :: String -> NoteContent
 parseNote input = case (parse note "(input)") input of
-  Left  err -> parseNote ""
+  Left  err -> parseNote ""  -- at this point, dont care about errors
   Right note -> note

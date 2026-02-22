@@ -1,35 +1,5 @@
 {-# LANGUAGE MultilineStrings #-}
-
-{--
-TODO:
-- status to new type
-- use types when possible rather than strings
---}
-
-import notes
-
-testNote = """
----
-tags:
-  - book
-status: reading
-rating:
-aliases:
-  - Structure and Interpretation of Computer Programs
-  - SICP
-author: "[[Harold Abelson and Gerald Jay Sussman]]"
-title: Structure and Interpretation of Computer Programs
-started: "[[2025-12-27]]"
-cover: https://drive.konger.online/book-cover/sicp.png
----
-
-# why i read
-- gotta learn the programs!
-# rev
-"""
-
-
-
+-- TODO: use the notes maker to build this
 
 data Book = Book {
     title :: String

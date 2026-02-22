@@ -21,5 +21,5 @@ export default {
     "Video",
     "Other",
   ],
-  firstDayString: "Dec 29 2025",
+  firstDayString: "Feb 9 2026",
 };
