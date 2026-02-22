@@ -1,6 +1,10 @@
 {-# LANGUAGE MultilineStrings #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 
+module ObsidianNoteParser (
+    note
+) where
+
 import Text.ParserCombinators.Parsec
 import Control.Monad (void)
 
@@ -28,6 +32,7 @@ hello there
 this is that ne
 eof
 """
+
 data Note = Note {
     fm      :: Maybe FrontMatter
   , content :: NoteContent
@@ -129,8 +134,3 @@ mdLine = manyTill anyChar (void eol <|> eof)
 
 -- yeah, we SHOULD do this cross platform. thus: at least a variable
 eol = char '\n'
-
-main :: IO ()
-main = do
-  print (parse note "(unknown)" testNote)
-  return ()
