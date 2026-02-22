@@ -2,7 +2,8 @@
 {-# LANGUAGE DuplicateRecordFields #-}
 
 module ObsidianNoteParser (
-    note
+    parseNote
+  , NoteContent
 ) where
 
 import Text.ParserCombinators.Parsec
@@ -33,26 +34,26 @@ this is that ne
 eof
 """
 
-data Note = Note {
+data NoteContent = NoteContent {
     fm      :: Maybe FrontMatter
-  , content :: NoteContent
+  , content :: NoteText
 } deriving (Show)
 
 type FrontMatter = [FrontMatterEntry]
 type FrontMatterEntry = (String, FrontMatterValue)
 type FrontMatterValue = [String]
 
-type NoteContent = [Section]
+type NoteText = [Section]
 data Section = Section {
     title   :: Maybe String -- maybe bc of pre-heading text
   , content :: String
 } deriving (Show)
 
-note :: Parser Note
+note :: Parser NoteContent
 note = do
   fm      <- optionMaybe (try frontMatter)
-  content <- noteContent
-  return $ Note fm content
+  content <- noteText
+  return $ NoteContent fm content
 
 -- Font Matter
 ----
@@ -98,8 +99,8 @@ yamlEnd = do
 -- Note Content
 ----
 
-noteContent :: Parser NoteContent
-noteContent = do
+noteText :: Parser NoteText
+noteText = do
   pre  <- openingText
   rest <- many section
   return (pre : rest)
@@ -134,3 +135,8 @@ mdLine = manyTill anyChar (void eol <|> eof)
 
 -- yeah, we SHOULD do this cross platform. thus: at least a variable
 eol = char '\n'
+
+parseNote :: String -> NoteContent
+parseNote input = case (parse note "(input)") input of
+  Left  err -> parseNote ""
+  Right note -> note
