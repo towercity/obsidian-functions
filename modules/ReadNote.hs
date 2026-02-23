@@ -2,7 +2,8 @@
 {-# LANGUAGE DuplicateRecordFields #-}
 
 module ReadNote (
-  makeNote
+  Note(..),
+  readNote
 ) where
 
 import Data.List
@@ -22,9 +23,7 @@ makeNote fileName fileContents =
        (takeBaseName fileName)
        (parseNote fileContents)
 
-testFileName = "/Users/j/obsidian/Writing/media/book/Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs.md"
-
--- todo: handle actual reading? but how, with IO?
-testRead = do
-  file <- readFile testFileName
-  print (makeNote testFileName file)
+readNote :: String -> IO Note
+readNote fileName = do
+  file <- readFile fileName
+  return (makeNote fileName file)

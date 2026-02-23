@@ -3,7 +3,7 @@
 
 module NoteParser (
     parseNote
-  , NoteContent
+  , NoteContent(..)
 ) where
 
 import Text.ParserCombinators.Parsec

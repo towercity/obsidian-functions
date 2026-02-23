@@ -1,5 +1,11 @@
 {-# LANGUAGE MultilineStrings #-}
--- TODO: use the notes maker to build this
+{-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE OverloadedRecordDot #-}
+
+
+import Data.Maybe
+
+import ReadNote
 
 data Book = Book {
     title :: String
@@ -24,3 +30,35 @@ x = Book {
   , started=Just "[[2025-12-28]]"
   , finished=Nothing
 }
+
+testFileName = "/Users/j/obsidian/Writing/media/book/Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs.md"
+
+makeBook :: Note -> Book
+makeBook note =
+  Book (getPropertyCertain "title" note)
+       (getPropertyCertain "author" note)
+       (makeSlug $ note.title)
+       (getPropertyCertain "status" note)
+       (getProperty "cover" note)
+       (getReview note)
+       (getSection "Why I Read" note)
+       (getProperty "started" note)
+       (getProperty "finished" note)
+
+getPropertyCertain :: String -> Note -> String
+getPropertyCertain k = fromMaybe "" . getProperty k
+
+getProperty :: String -> Note -> Maybe String
+getProperty k note = do
+  fm' <- note.content.fm --NOTE: doesnt compile. lets combune ReadNote and NoteParser to fix
+  value <- lookup k fm'
+  return value
+
+makeSlug :: String -> String
+makeSlug = undefined
+
+getSection :: String -> Note -> Maybe String
+getSection = undefined
+
+getReview :: Note -> Maybe String
+getReview = undefined
