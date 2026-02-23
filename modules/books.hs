@@ -50,9 +50,9 @@ getPropertyCertain k = fromMaybe "" . getProperty k
 
 getProperty :: String -> Note -> Maybe String
 getProperty k note = do
-  fm' <- note.content.fm --NOTE: doesnt compile. lets combune ReadNote and NoteParser to fix
+  fm' <- note.content.fm
   value <- lookup k fm'
-  return value
+  listToMaybe value
 
 makeSlug :: String -> String
 makeSlug = undefined
