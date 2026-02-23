@@ -3,7 +3,8 @@
 {-# LANGUAGE OverloadedRecordDot #-}
 
 
-import Data.Maybe
+import Data.Maybe (fromMaybe, listToMaybe)
+import Data.Char (toLower)
 
 import ReadNote
 
@@ -55,7 +56,10 @@ getProperty k note = do
   listToMaybe value
 
 makeSlug :: String -> String
-makeSlug = undefined
+makeSlug title = map (unSpace . toLower) title
+  where
+    unSpace ' ' = '-'
+    unSpace  c  =  c
 
 getSection :: String -> Note -> Maybe String
 getSection = undefined
