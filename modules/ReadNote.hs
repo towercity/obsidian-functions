@@ -6,6 +6,7 @@ module ReadNote (
   Note(..)
   , NoteContent(..)
   , readNote
+  , testNote
 ) where
 
 import Data.List
@@ -13,16 +14,17 @@ import System.FilePath (takeFileName, takeBaseName)
 import Text.ParserCombinators.Parsec
 import Control.Monad (void)
 
+testNote = Note {filename = "Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs.md", title = "Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs", noteContent = NoteContent {fm = Just [("tags",["book"]),("status",["reading"]),("rating",[""]),("aliases",["Structure and Interpretation of Computer Programs","SICP"]),("author",["\"[[Harold Abelson and Gerald Jay Sussman]]\""]),("title",["Structure and Interpretation of Computer Programs"]),("started",["\"[[2025-12-27]]\""]),("cover",["https://drive.konger.online/book-cover/sicp.png"])], noteText = [Section {title = Nothing, sectionText = "\n"},Section {title = Just "why i read", sectionText = "- gotta learn the programs!\n"},Section {title = Just "rev", sectionText = "\n"}]}}
 
 data Note = Note {
     filename :: String
   , title :: String
-  , content :: NoteContent
+  , noteContent :: NoteContent
 } deriving (Show)
 
 data NoteContent = NoteContent {
     fm      :: Maybe FrontMatter
-  , content :: NoteText
+  , noteText :: NoteText
 } deriving (Show)
 
 type FrontMatter = [FrontMatterEntry]
@@ -32,7 +34,7 @@ type FrontMatterValue = [String]
 type NoteText = [Section]
 data Section = Section {
     title   :: Maybe String -- maybe bc of pre-heading text
-  , content :: String
+  , sectionText :: String
 } deriving (Show)
 
 
@@ -52,7 +54,7 @@ readNote fileName = do
 note :: Parser NoteContent
 note = do
   fm      <- optionMaybe (try frontMatter)
-  content <- noteText
+  content <- parseNoteText
   return $ NoteContent fm content
 
 -- Font Matter
@@ -99,8 +101,8 @@ yamlEnd = do
 -- Note Content
 ----
 
-noteText :: Parser NoteText
-noteText = do
+parseNoteText :: Parser NoteText
+parseNoteText = do
   pre  <- openingText
   rest <- many section
   return (pre : rest)

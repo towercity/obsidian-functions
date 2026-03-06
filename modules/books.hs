@@ -5,8 +5,10 @@
 
 import Data.Maybe (fromMaybe, listToMaybe)
 import Data.Char (toLower)
+import Data.List (find)
+import Control.Monad.IO.Class (liftIO)
 
-import ReadNote
+import ReadNote (Note(..), NoteContent(..), readNote, testNote)
 
 data Book = Book {
     title :: String
@@ -34,6 +36,7 @@ x = Book {
 
 testFileName = "/Users/j/obsidian/Writing/media/book/Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs.md"
 
+
 makeBook :: Note -> Book
 makeBook note =
   Book (getPropertyCertain "title" note)
@@ -51,18 +54,18 @@ getPropertyCertain k = fromMaybe "" . getProperty k
 
 getProperty :: String -> Note -> Maybe String
 getProperty k note = do
-  fm' <- note.content.fm
+  fm' <- note.noteContent.fm
   value <- lookup k fm'
   listToMaybe value
 
 makeSlug :: String -> String
-makeSlug title = map (unSpace . toLower) title
+makeSlug = map (unSpace . toLower)
   where
     unSpace ' ' = '-'
     unSpace  c  =  c
 
 getSection :: String -> Note -> Maybe String
-getSection = undefined
+getSection secName note = undefined
 
 getReview :: Note -> Maybe String
 getReview = undefined
