@@ -1,6 +1,5 @@
 {-# LANGUAGE MultilineStrings #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE OverloadedRecordDot #-}
 
 module ReadNote (
   Note(..)
@@ -61,8 +60,7 @@ frontMatter :: Parser FrontMatter
 frontMatter = do
   string "---"
   eol
-  entries <- manyTill yamlEntry (try yamlEnd)
-  return entries
+  manyTill yamlEntry (try yamlEnd)
 
 yamlEntry :: Parser FrontMatterEntry
 yamlEntry = do
@@ -79,8 +77,7 @@ yamlValue =
 
 yamlValueMulti = do
   eol   -- multi-entry values always start with AND are separated by eols!
-  value <- many1 (string "  - " >> yamlValueSingle)
-  return value
+  many1 (string "  - " >> yamlValueSingle)
 
 -- we use this to properly wrap our single values to keep the same type as multi
 -- entry values
@@ -94,6 +91,7 @@ yamlValueSingle = manyTill anyChar eol
 yamlEnd = do
   string "---"
   optional (char '\n')
+
 
 -- Note Content
 ----
@@ -123,8 +121,7 @@ h1 = do
   char '#'
   notFollowedBy (char '#')
   skipMany (char ' ')
-  heading <- mdLine
-  return heading
+  mdLine
 
 mdLine :: Parser String
 mdLine = manyTill anyChar (void eol <|> eof)
@@ -137,6 +134,6 @@ eol = char '\n'
 
 -- do all our parsing in this function for easy export!
 parseNote :: String -> (Maybe FrontMatter, [Section])
-parseNote input = case (parse note "(input)") input of
+parseNote input = case parse note "(input)" input of
   Left  err -> parseNote ""  -- at this point, dont care about errors
   Right note -> note
