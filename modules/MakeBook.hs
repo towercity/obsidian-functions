@@ -2,6 +2,10 @@
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 
+module MakeBook (
+  Book(..),
+  makeBook
+) where
 
 import Data.Maybe (fromMaybe, listToMaybe)
 import Data.Char (toLower)
