@@ -6,7 +6,7 @@
 import Data.Maybe (fromMaybe, listToMaybe)
 import Data.Char (toLower)
 import Data.List (find)
-import Control.Monad.IO.Class (liftIO)
+import Control.Monad (guard)
 
 import ReadNote
 
@@ -22,26 +22,13 @@ data Book = Book {
   , finished :: Maybe String
 } deriving (Show)
 
-x = Book {
-    title="Mister Sleep"
-  , author="Steve King"
-  , slug="mr-sleep-steve-king"
-  , status="Reading"
-  , cover=Just "cover.jpg"
-  , review=Nothing
-  , whyRead=Just "all them"
-  , started=Just "[[2025-12-28]]"
-  , finished=Nothing
-}
-
 testFileName = "/Users/j/obsidian/Writing/media/book/Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs.md"
-
 
 makeBook :: Note -> Book
 makeBook note =
   Book (getPropertyCertain "title" note)
        (getPropertyCertain "author" note)
-       (makeSlug $ note.title)
+       (makeSlug note.title)
        (getPropertyCertain "status" note)
        (getProperty "cover" note)
        (getReview note)
@@ -66,7 +53,16 @@ makeSlug = map (unSpace . toLower)
 
 getSection :: String -> Note -> Maybe String
 getSection secName note = do
-  lookup (Just secName) (noteContent note)
+  section <- lookup (Just secName) (noteContent note)
+  guard (section /= "\n")
+  return section
+
+getFirstAvailableSection :: [String] -> Note -> Maybe String
+getFirstAvailableSection secs note = foldr firstAvailableSection Nothing secs
+  where
+    firstAvailableSection sec acc = case getSection sec note of
+      Just x  -> Just x
+      Nothing -> acc
 
 getReview :: Note -> Maybe String
-getReview = undefined
+getReview = getFirstAvailableSection ["why i gave up", "rev"]
