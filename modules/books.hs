@@ -8,7 +8,7 @@ import Data.Char (toLower)
 import Data.List (find)
 import Control.Monad.IO.Class (liftIO)
 
-import ReadNote (Note(..), NoteContent(..), readNote, testNote)
+import ReadNote
 
 data Book = Book {
     title :: String
@@ -54,7 +54,7 @@ getPropertyCertain k = fromMaybe "" . getProperty k
 
 getProperty :: String -> Note -> Maybe String
 getProperty k note = do
-  fm' <- note.noteContent.fm
+  fm' <- note.fm
   value <- lookup k fm'
   listToMaybe value
 

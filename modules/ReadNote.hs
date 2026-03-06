@@ -4,7 +4,6 @@
 
 module ReadNote (
   Note(..)
-  , NoteContent(..)
   , readNote
   , testNote
 ) where
@@ -14,24 +13,19 @@ import System.FilePath (takeFileName, takeBaseName)
 import Text.ParserCombinators.Parsec
 import Control.Monad (void)
 
-testNote = Note {filename = "Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs.md", title = "Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs", noteContent = NoteContent {fm = Just [("tags",["book"]),("status",["reading"]),("rating",[""]),("aliases",["Structure and Interpretation of Computer Programs","SICP"]),("author",["\"[[Harold Abelson and Gerald Jay Sussman]]\""]),("title",["Structure and Interpretation of Computer Programs"]),("started",["\"[[2025-12-27]]\""]),("cover",["https://drive.konger.online/book-cover/sicp.png"])], noteText = [Section {title = Nothing, sectionText = "\n"},Section {title = Just "why i read", sectionText = "- gotta learn the programs!\n"},Section {title = Just "rev", sectionText = "\n"}]}}
+testNote = Note {filename = "Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs.md", title = "Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs", fm = Just [("tags",["book"]),("status",["reading"]),("rating",[""]),("aliases",["Structure and Interpretation of Computer Programs","SICP"]),("author",["\"[[Harold Abelson and Gerald Jay Sussman]]\""]),("title",["Structure and Interpretation of Computer Programs"]),("started",["\"[[2025-12-27]]\""]),("cover",["https://drive.konger.online/book-cover/sicp.png"])], noteContent = [Section {title = Nothing, sectionText = "\n"},Section {title = Just "why i read", sectionText = "- gotta learn the programs!\n"},Section {title = Just "rev", sectionText = "\n"}]}
 
 data Note = Note {
     filename :: String
   , title :: String
-  , noteContent :: NoteContent
-} deriving (Show)
-
-data NoteContent = NoteContent {
-    fm      :: Maybe FrontMatter
-  , noteText :: NoteText
+  , fm :: Maybe FrontMatter
+  , noteContent :: [Section]
 } deriving (Show)
 
 type FrontMatter = [FrontMatterEntry]
 type FrontMatterEntry = (String, FrontMatterValue)
 type FrontMatterValue = [String]
 
-type NoteText = [Section]
 data Section = Section {
     title   :: Maybe String -- maybe bc of pre-heading text
   , sectionText :: String
@@ -42,7 +36,10 @@ makeNote :: String -> String-> Note
 makeNote fileName fileContents =
   Note (takeFileName fileName)
        (takeBaseName fileName)
-       (parseNote fileContents)
+       fm
+       contents
+  where
+    (fm, contents) = parseNote fileContents
 
 readNote :: String -> IO Note
 readNote fileName = do
@@ -51,11 +48,11 @@ readNote fileName = do
 
 
 
-note :: Parser NoteContent
+note :: Parser (Maybe FrontMatter, [Section])
 note = do
   fm      <- optionMaybe (try frontMatter)
   content <- parseNoteText
-  return $ NoteContent fm content
+  return (fm, content)
 
 -- Font Matter
 ----
@@ -101,7 +98,7 @@ yamlEnd = do
 -- Note Content
 ----
 
-parseNoteText :: Parser NoteText
+parseNoteText :: Parser [Section]
 parseNoteText = do
   pre  <- openingText
   rest <- many section
@@ -139,7 +136,7 @@ mdLine = manyTill anyChar (void eol <|> eof)
 eol = char '\n'
 
 -- do all our parsing in this function for easy export!
-parseNote :: String -> NoteContent
+parseNote :: String -> (Maybe FrontMatter, [Section])
 parseNote input = case (parse note "(input)") input of
   Left  err -> parseNote ""  -- at this point, dont care about errors
   Right note -> note
