@@ -12,7 +12,8 @@ import System.FilePath (takeFileName, takeBaseName)
 import Text.ParserCombinators.Parsec
 import Control.Monad (void)
 
-testNote = Note {filename = "Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs.md", title = "Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs", fm = Just [("tags",["book"]),("status",["reading"]),("rating",[""]),("aliases",["Structure and Interpretation of Computer Programs","SICP"]),("author",["\"[[Harold Abelson and Gerald Jay Sussman]]\""]),("title",["Structure and Interpretation of Computer Programs"]),("started",["\"[[2025-12-27]]\""]),("cover",["https://drive.konger.online/book-cover/sicp.png"])], noteContent = [Section {title = Nothing, sectionText = "\n"},Section {title = Just "why i read", sectionText = "- gotta learn the programs!\n"},Section {title = Just "rev", sectionText = "\n"}]}
+-- testNote = ' '
+testNote = Note {filename = "Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs.md", title = "Harold Abelson and Gerald Jay Sussman - Structure and Interpretation of Computer Programs", fm = Just [("tags",["book"]),("status",["reading"]),("rating",[""]),("aliases",["Structure and Interpretation of Computer Programs","SICP"]),("author",["\"[[Harold Abelson and Gerald Jay Sussman]]\""]),("title",["Structure and Interpretation of Computer Programs"]),("started",["\"[[2025-12-27]]\""]),("cover",["https://drive.konger.online/book-cover/sicp.png"])], noteContent = [(Nothing,"\n"),(Just "why i read","- gotta learn the programs!\n"),(Just "rev","\n")]}
 
 data Note = Note {
     filename :: String
@@ -25,10 +26,7 @@ type FrontMatter = [FrontMatterEntry]
 type FrontMatterEntry = (String, FrontMatterValue)
 type FrontMatterValue = [String]
 
-data Section = Section {
-    title   :: Maybe String -- maybe bc of pre-heading text
-  , sectionText :: String
-} deriving (Show)
+type Section = (Maybe String, String)
 
 
 makeNote :: String -> String-> Note
@@ -105,13 +103,13 @@ parseNoteText = do
 openingText :: Parser Section
 openingText = do
   lines' <- mdLines
-  return $ Section Nothing (unlines lines')
+  return (Nothing, (unlines lines'))
 
 section :: Parser Section
 section = do
   title  <- h1
   lines' <- mdLines
-  return $ Section (Just title) (unlines lines')
+  return ((Just title), (unlines lines'))
 
 mdLines :: Parser [String]
 mdLines = manyTill mdLine (void (lookAhead h1) <|> eof)

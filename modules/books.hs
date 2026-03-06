@@ -65,7 +65,8 @@ makeSlug = map (unSpace . toLower)
     unSpace  c  =  c
 
 getSection :: String -> Note -> Maybe String
-getSection secName note = undefined
+getSection secName note = do
+  lookup (Just secName) (noteContent note)
 
 getReview :: Note -> Maybe String
 getReview = undefined
