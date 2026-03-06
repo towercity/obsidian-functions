@@ -3,10 +3,6 @@
 
 module Note (
     Note(..)
-  , Section
-  , FrontMatter
-  , FrontMatterEntry
-  , FrontMatterValue
   , getSection
   , getFirstAvailableSection
   , getProperty
